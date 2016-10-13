@@ -41,6 +41,7 @@ public class Main extends JavaPlugin {
     Collections.shuffle(Main.luckyItems, new Random());
 
     pluginManager.registerEvents(new BlockListener(), this);
+
   }
 
   public void onDisable() {
@@ -130,7 +131,7 @@ public class Main extends JavaPlugin {
   public List<ItemStack> getLuckyItems() {
     List<ItemStack> luckyItems = new ArrayList<ItemStack>();
 
-    int itemTypeCount = 0;
+    
 
     List<Enchantment> toolEnchantments =
         Arrays.asList(Enchantment.DAMAGE_ALL, Enchantment.DIG_SPEED, Enchantment.DURABILITY,
@@ -141,12 +142,14 @@ public class Main extends JavaPlugin {
     List<Enchantment> armorEnchantments =
         Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.PROTECTION_EXPLOSIONS,
             Enchantment.PROTECTION_FALL, Enchantment.PROTECTION_PROJECTILE, Enchantment.THORNS);
-    
     List<ItemStack> armor =
         Arrays.asList(new ItemStack(Material.DIAMOND_BOOTS, 1), new ItemStack(Material.DIAMOND_LEGGINGS, 1),
             new ItemStack(Material.DIAMOND_CHESTPLATE, 1), new ItemStack(Material.DIAMOND_HELMET, 1));
-
-    while (itemTypeCount < 2) {
+    List<Enchantment> bowEnchantments =
+        Arrays.asList(Enchantment.ARROW_DAMAGE, Enchantment.ARROW_FIRE, Enchantment.ARROW_INFINITE, Enchantment.ARROW_KNOCKBACK);
+    
+    int itemTypeCount = 0;
+    while (itemTypeCount < 3) {
       List<Enchantment> enchantments = new ArrayList<Enchantment>();
       List<ItemStack> items = new ArrayList<ItemStack>();
       if (itemTypeCount == 0) {
@@ -156,10 +159,13 @@ public class Main extends JavaPlugin {
       } else if (itemTypeCount == 1) {
         enchantments.addAll(armorEnchantments);
         items.addAll(armor);
+      } else if (itemTypeCount == 2) {
+        enchantments.addAll(bowEnchantments);
+        items.add(new ItemStack(Material.BOW, 1));
       }
       int itemCount = 0;
       while (itemCount < 50) {
-        ItemStack item = items.get(Main.random.nextInt(items.size()));
+        ItemStack item = items.get(Main.random.nextInt(items.size())).clone();
         ItemMeta itemMeta = item.getItemMeta();
         int enchantmentAmount = Main.random.nextInt(5 - 1) + 1;
         int enchantmentAmountCount = 0;
