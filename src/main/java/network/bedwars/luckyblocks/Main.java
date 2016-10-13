@@ -36,7 +36,7 @@ public class Main extends JavaPlugin {
 
     Main.luckyPotions = getLuckyPotions();
     Collections.shuffle(Main.luckyPotions, new Random());
-    
+
     Main.luckyItems = getLuckyItems();
     Collections.shuffle(Main.luckyItems, new Random());
 
@@ -131,23 +131,25 @@ public class Main extends JavaPlugin {
   public List<ItemStack> getLuckyItems() {
     List<ItemStack> luckyItems = new ArrayList<ItemStack>();
 
-    
+
 
     List<Enchantment> toolEnchantments =
         Arrays.asList(Enchantment.DAMAGE_ALL, Enchantment.DIG_SPEED, Enchantment.DURABILITY,
             Enchantment.FIRE_ASPECT, Enchantment.KNOCKBACK);
     List<ItemStack> tools =
         Arrays.asList(new ItemStack(Material.WOOD_SWORD, 1), new ItemStack(Material.GOLD_SWORD, 1),
-            new ItemStack(Material.IRON_SWORD, 1), new ItemStack(Material.DIAMOND_SWORD, 1));
+            new ItemStack(Material.IRON_SWORD, 1), new ItemStack(Material.DIAMOND_SWORD, 1),
+            new ItemStack(Material.WOOD_PICKAXE, 1), new ItemStack(Material.GOLD_PICKAXE, 1),
+            new ItemStack(Material.IRON_PICKAXE, 1), new ItemStack(Material.DIAMOND_PICKAXE, 1));
     List<Enchantment> armorEnchantments =
         Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.PROTECTION_EXPLOSIONS,
             Enchantment.PROTECTION_FALL, Enchantment.PROTECTION_PROJECTILE, Enchantment.THORNS);
-    List<ItemStack> armor =
-        Arrays.asList(new ItemStack(Material.DIAMOND_BOOTS, 1), new ItemStack(Material.DIAMOND_LEGGINGS, 1),
-            new ItemStack(Material.DIAMOND_CHESTPLATE, 1), new ItemStack(Material.DIAMOND_HELMET, 1));
-    List<Enchantment> bowEnchantments =
-        Arrays.asList(Enchantment.ARROW_DAMAGE, Enchantment.ARROW_FIRE, Enchantment.ARROW_INFINITE, Enchantment.ARROW_KNOCKBACK);
-    
+    List<ItemStack> armor = Arrays.asList(new ItemStack(Material.DIAMOND_BOOTS, 1),
+        new ItemStack(Material.DIAMOND_LEGGINGS, 1), new ItemStack(Material.DIAMOND_CHESTPLATE, 1),
+        new ItemStack(Material.DIAMOND_HELMET, 1));
+    List<Enchantment> bowEnchantments = Arrays.asList(Enchantment.ARROW_DAMAGE,
+        Enchantment.ARROW_FIRE, Enchantment.ARROW_INFINITE, Enchantment.ARROW_KNOCKBACK);
+
     int itemTypeCount = 0;
     while (itemTypeCount < 3) {
       List<Enchantment> enchantments = new ArrayList<Enchantment>();
@@ -173,7 +175,8 @@ public class Main extends JavaPlugin {
           int enchantmentValuesSize = enchantments.size();
           int enchantmentLevel = Main.random.nextInt(7 - 1) + 1;
 
-          itemMeta.addEnchant(enchantments.get(Main.random.nextInt(enchantmentValuesSize - 1) + 1), enchantmentLevel, true);
+          itemMeta.addEnchant(enchantments.get(Main.random.nextInt(enchantmentValuesSize - 1) + 1),
+              enchantmentLevel, true);
           enchantmentAmountCount++;
         }
         item.setItemMeta(itemMeta);
