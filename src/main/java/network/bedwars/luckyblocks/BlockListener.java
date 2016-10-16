@@ -14,6 +14,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import io.github.bedwarsrel.BedwarsRel.Game.Game;
+
 public class BlockListener implements Listener {
 
   static Logger logger = Main.logger;
@@ -24,13 +26,21 @@ public class BlockListener implements Listener {
       return;
     }
 
+    io.github.bedwarsrel.BedwarsRel.Main bedwarsPlugin = (io.github.bedwarsrel.BedwarsRel.Main) Main
+        .getInstance().getServer().getPluginManager().getPlugin("BedwarsRel");
+
+    Game game = bedwarsPlugin.getGameManager().getGameOfPlayer(event.getPlayer());
+
+    if (game == null) {
+      return;
+    }
     event.getBlock().setType(Material.AIR);
     int eventType = Main.random.nextInt(5);
     if (eventType == 0) {
       event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(),
           Main.luckyPotions.get(Main.random.nextInt(Main.luckyPotions.size() - 1) + 1));
     } else if (eventType == 1) {
-      getUnluckyEffect(event);
+      getUnluckyEffect(event, game);
     } else if (eventType == 2) {
       event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(),
           Main.luckyItems.get(Main.random.nextInt(Main.luckyItems.size() - 1) + 1));
@@ -38,29 +48,35 @@ public class BlockListener implements Listener {
       event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(),
           Main.luckyItems.get(Main.random.nextInt(Main.luckyItems.size() - 1) + 1));
     } else if (eventType == 4) {
-      getLuckyEffect(event);
+      getLuckyEffect(event, game);
     }
   }
 
 
-  public void getUnluckyEffect(BlockBreakEvent event) {
+  public void getUnluckyEffect(BlockBreakEvent event, Game game) {
     Player player = event.getPlayer();
     int eventType = Main.random.nextInt(5);
     if (eventType == 0) {
+      game.setPlayerDamager(player, null);
       player.getWorld().createExplosion(player.getLocation().getX(), player.getLocation().getY(),
           player.getLocation().getZ(), Float.valueOf("5.0"), false, false);
     } else if (eventType == 1) {
+      game.setPlayerDamager(player, null);
       player.setHealth(0);
+      player.sendMessage(ChatColor.RED + "Der LuckyBlock hat dich getötet.");
     } else if (eventType == 2) {
       player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20 * 10, 10));
     } else if (eventType == 3) {
       player.getInventory().clear();
+      player.sendMessage(ChatColor.RED + "Der LuckyBlock hat dein Inventar gelöscht.");
     } else if (eventType == 4) {
-      player.getLocation().getBlock().setType(Material.FIRE);
+      int length = (Main.random.nextInt(10) + 1) * 20;
+      game.setPlayerDamager(player, null);
+      player.setFireTicks(length);
     }
   }
 
-  public void getLuckyEffect(BlockBreakEvent event) {
+  public void getLuckyEffect(BlockBreakEvent event, Game game) {
     Player player = event.getPlayer();
     int eventType = Main.random.nextInt(7);
     if (eventType == 0) {
@@ -86,6 +102,7 @@ public class BlockListener implements Listener {
       event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), gold);
     } else if (eventType == 3) {
       player.setHealth(player.getMaxHealth());
+      player.sendMessage(ChatColor.GREEN + "Dein LuckyBlock hat dich geheilt.");
     } else if (eventType == 4) {
       int amount = (Main.random.nextInt(10) + 1) * 5;
       ItemStack snowball = new ItemStack(Material.SNOW_BALL, amount);

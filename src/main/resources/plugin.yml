@@ -1,3 +1,4 @@
 name: LuckyBlocks
 main: network.bedwars.luckyblocks.Main
 version: ${versionstring}
+depend: [BedwarsRel]
