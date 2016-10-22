@@ -55,7 +55,7 @@ public class BlockListener implements Listener {
 
   public void getUnluckyEffect(BlockBreakEvent event, Game game) {
     Player player = event.getPlayer();
-    int eventType = Main.random.nextInt(5);
+    int eventType = Main.random.nextInt(8);
     if (eventType == 0) {
       game.setPlayerDamager(player, null);
       player.getWorld().createExplosion(player.getLocation().getX(), player.getLocation().getY(),
@@ -73,12 +73,20 @@ public class BlockListener implements Listener {
       int length = (Main.random.nextInt(10) + 1) * 20;
       game.setPlayerDamager(player, null);
       player.setFireTicks(length);
+    } else if (eventType == 5) {
+      player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 30, 10));
+    } else if (eventType == 6) {
+      player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 30, 10));
+    } else if (eventType == 7) {
+      player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 15, 10));
+      player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 15, 10));
+      player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 15, 10));
     }
   }
 
   public void getLuckyEffect(BlockBreakEvent event, Game game) {
     Player player = event.getPlayer();
-    int eventType = Main.random.nextInt(7);
+    int eventType = Main.random.nextInt(8);
     if (eventType == 0) {
       int knockbackLevel = Main.random.nextInt(9);
       ItemStack stick = new ItemStack(Material.STICK, 1);
@@ -115,6 +123,9 @@ public class BlockListener implements Listener {
       int amount = (Main.random.nextInt(10) + 1) * 5;
       ItemStack apple = new ItemStack(Material.GOLDEN_APPLE, amount);
       event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), apple);
+    } else if (eventType == 7) {
+      ItemStack enderpearl = new ItemStack(Material.ENDER_PEARL, 1);
+      event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), enderpearl);
     }
   }
 }
