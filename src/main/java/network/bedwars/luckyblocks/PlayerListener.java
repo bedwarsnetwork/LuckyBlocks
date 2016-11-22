@@ -15,8 +15,6 @@ public class PlayerListener implements Listener {
     Main.getInstance().getServer().getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
       @Override
       public void run() {
-        event.getPlayer().sendMessage(
-            ChatColor.GRAY + "Das Resource-Pack für Lucky Bedwars wird heruntergeladen...");
         ResourcePackAPI.setResourcepack(event.getPlayer(),
             "http://direct.bedwars.network/lucky-block-ressourcepack.zip");
       }
