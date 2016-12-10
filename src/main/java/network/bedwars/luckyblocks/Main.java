@@ -41,6 +41,7 @@ public class Main extends JavaPlugin {
     Collections.shuffle(Main.luckyItems, new Random());
 
     pluginManager.registerEvents(new BlockListener(), this);
+    pluginManager.registerEvents(new PlayerListener(), this);
 
   }
 

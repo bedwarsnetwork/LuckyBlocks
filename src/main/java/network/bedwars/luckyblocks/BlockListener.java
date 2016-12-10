@@ -1,5 +1,7 @@
 package network.bedwars.luckyblocks;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
@@ -81,6 +83,22 @@ public class BlockListener implements Listener {
       player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 15, 10));
       player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 15, 10));
       player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 15, 10));
+    } else if (eventType == 8) {
+      Player randomPlayer = getRandomTeamPlayer(game, player);
+      if (randomPlayer != null) {
+        game.setPlayerDamager(player, null);
+        randomPlayer.setHealth(0);
+        game.broadcast(randomPlayer.getDisplayName() + " wurde durch den LuckyBlock von "
+            + event.getPlayer().getDisplayName() + " getötet.");
+      }
+    } else if (eventType == 9) {
+      Player randomPlayer = getRandomTeamPlayer(game, player);
+      if (randomPlayer != null) {
+        randomPlayer.setHealth(0);
+        game.broadcast(
+            "Das Inventar von " + randomPlayer.getDisplayName() + " wurde durch den LuckyBlock von "
+                + event.getPlayer().getDisplayName() + " gelöscht.");
+      }
     }
   }
 
@@ -126,6 +144,55 @@ public class BlockListener implements Listener {
     } else if (eventType == 7) {
       ItemStack enderpearl = new ItemStack(Material.ENDER_PEARL, 1);
       event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), enderpearl);
+    } else if (eventType == 8) {
+      Player randomPlayer = getRandomPlayer(game, false);
+      if (randomPlayer != null) {
+        game.setPlayerDamager(player, null);
+        randomPlayer.setHealth(0);
+        game.broadcast(randomPlayer.getDisplayName() + " wurde durch den LuckyBlock von "
+            + player.getDisplayName() + " getötet.");
+      }
+    } else if (eventType == 9) {
+      Player randomPlayer = getRandomPlayer(game, false);
+      if (randomPlayer != null) {
+        randomPlayer.setHealth(0);
+        game.broadcast("Das Inventar von " + randomPlayer.getDisplayName()
+            + " wurde durch den LuckyBlock von " + player.getDisplayName() + " gelöscht.");
+      }
     }
+  }
+
+  private Player getRandomPlayer(Game game, Boolean all) {
+    ArrayList<Player> players = game.getPlayers();
+    if (!all) {
+      players.removeAll(game.getTeamPlayers());
+    }
+    for (Player player : players) {
+      if (game.isSpectator(player)) {
+        players.remove(player);
+      }
+    }
+
+    if (players.size() > 0) {
+      int selectedPlayer = Main.random.nextInt(players.size() - 1);
+      return players.get(selectedPlayer);
+    }
+    return null;
+  }
+
+  private Player getRandomTeamPlayer(Game game, Player player) {
+    List<Player> players = game.getPlayerTeam(player).getPlayers();
+    players.remove(player);
+    for (Player aPlayer : players) {
+      if (game.isSpectator(aPlayer)) {
+        players.remove(aPlayer);
+      }
+    }
+
+    if (players.size() > 0) {
+      int selectedPlayer = Main.random.nextInt(players.size() - 1);
+      return players.get(selectedPlayer);
+    }
+    return null;
   }
 }
