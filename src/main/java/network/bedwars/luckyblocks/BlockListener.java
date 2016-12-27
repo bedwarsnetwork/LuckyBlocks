@@ -57,7 +57,7 @@ public class BlockListener implements Listener {
 
   public void getUnluckyEffect(BlockBreakEvent event, Game game) {
     Player player = event.getPlayer();
-    int eventType = Main.random.nextInt(8);
+    int eventType = Main.random.nextInt(10);
     if (eventType == 0) {
       game.setPlayerDamager(player, null);
       player.getWorld().createExplosion(player.getLocation().getX(), player.getLocation().getY(),
@@ -104,7 +104,7 @@ public class BlockListener implements Listener {
 
   public void getLuckyEffect(BlockBreakEvent event, Game game) {
     Player player = event.getPlayer();
-    int eventType = Main.random.nextInt(8);
+    int eventType = Main.random.nextInt(10);
     if (eventType == 0) {
       int knockbackLevel = Main.random.nextInt(9);
       ItemStack stick = new ItemStack(Material.STICK, 1);
