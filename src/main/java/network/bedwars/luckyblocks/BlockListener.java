@@ -37,7 +37,7 @@ public class BlockListener implements Listener {
       return;
     }
     event.getBlock().setType(Material.AIR);
-    int eventType = Main.random.nextInt(5);
+    int eventType = Main.random.nextInt(4 + 1);
     if (eventType == 0) {
       event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(),
           Main.luckyPotions.get(Main.random.nextInt(Main.luckyPotions.size() - 1) + 1));
@@ -57,7 +57,7 @@ public class BlockListener implements Listener {
 
   public void getUnluckyEffect(BlockBreakEvent event, Game game) {
     Player player = event.getPlayer();
-    int eventType = Main.random.nextInt(10);
+    int eventType = Main.random.nextInt(9 + 1);
     if (eventType == 0) {
       game.setPlayerDamager(player, null);
       player.getWorld().createExplosion(player.getLocation().getX(), player.getLocation().getY(),
@@ -88,23 +88,24 @@ public class BlockListener implements Listener {
       if (randomPlayer != null) {
         game.setPlayerDamager(player, null);
         randomPlayer.setHealth(0);
-        game.broadcast(randomPlayer.getDisplayName() + " wurde durch den LuckyBlock von "
-            + event.getPlayer().getDisplayName() + " getötet.");
+        game.broadcast(
+            randomPlayer.getDisplayName() + ChatColor.RESET + " wurde durch den LuckyBlock von "
+                + event.getPlayer().getDisplayName() + ChatColor.RESET + " getötet.");
       }
     } else if (eventType == 9) {
       Player randomPlayer = getRandomTeamPlayer(game, player);
       if (randomPlayer != null) {
         randomPlayer.setHealth(0);
-        game.broadcast(
-            "Das Inventar von " + randomPlayer.getDisplayName() + " wurde durch den LuckyBlock von "
-                + event.getPlayer().getDisplayName() + " gelöscht.");
+        game.broadcast("Das Inventar von " + randomPlayer.getDisplayName() + ChatColor.RESET
+            + " wurde durch den LuckyBlock von " + event.getPlayer().getDisplayName()
+            + ChatColor.RESET + " gelöscht.");
       }
     }
   }
 
   public void getLuckyEffect(BlockBreakEvent event, Game game) {
     Player player = event.getPlayer();
-    int eventType = Main.random.nextInt(10);
+    int eventType = Main.random.nextInt(9 + 1);
     if (eventType == 0) {
       int knockbackLevel = Main.random.nextInt(9);
       ItemStack stick = new ItemStack(Material.STICK, 1);
@@ -174,7 +175,7 @@ public class BlockListener implements Listener {
     }
 
     if (players.size() > 0) {
-      int selectedPlayer = Main.random.nextInt(players.size() - 1);
+      int selectedPlayer = Main.random.nextInt(players.size());
       return players.get(selectedPlayer);
     }
     return null;
@@ -190,7 +191,7 @@ public class BlockListener implements Listener {
     }
 
     if (players.size() > 0) {
-      int selectedPlayer = Main.random.nextInt(players.size() - 1);
+      int selectedPlayer = Main.random.nextInt(players.size());
       return players.get(selectedPlayer);
     }
     return null;
