@@ -165,14 +165,17 @@ public class BlockListener implements Listener {
 
   private Player getRandomPlayer(Game game, Boolean all) {
     ArrayList<Player> players = game.getPlayers();
+    ArrayList<Player> spectators = new ArrayList<Player>();
     if (!all) {
       players.removeAll(game.getTeamPlayers());
     }
+
     for (Player player : players) {
       if (game.isSpectator(player)) {
-        players.remove(player);
+        spectators.add(player);
       }
     }
+    players.removeAll(spectators);
 
     if (players.size() > 0) {
       int selectedPlayer = Main.random.nextInt(players.size());
@@ -183,12 +186,14 @@ public class BlockListener implements Listener {
 
   private Player getRandomTeamPlayer(Game game, Player player) {
     List<Player> players = game.getPlayerTeam(player).getPlayers();
+    ArrayList<Player> spectators = new ArrayList<Player>();
     players.remove(player);
     for (Player aPlayer : players) {
       if (game.isSpectator(aPlayer)) {
-        players.remove(aPlayer);
+        spectators.add(player);
       }
     }
+    players.removeAll(spectators);
 
     if (players.size() > 0) {
       int selectedPlayer = Main.random.nextInt(players.size());
