@@ -150,15 +150,17 @@ public class BlockListener implements Listener {
       if (randomPlayer != null) {
         game.setPlayerDamager(player, null);
         randomPlayer.setHealth(0);
-        game.broadcast(randomPlayer.getDisplayName() + " wurde durch den LuckyBlock von "
-            + player.getDisplayName() + " getötet.");
+        game.broadcast(
+            randomPlayer.getDisplayName() + ChatColor.RESET + " wurde durch den LuckyBlock von "
+                + player.getDisplayName() + ChatColor.RESET + " getötet.");
       }
     } else if (eventType == 9) {
       Player randomPlayer = getRandomPlayer(game, false);
       if (randomPlayer != null) {
         randomPlayer.setHealth(0);
-        game.broadcast("Das Inventar von " + randomPlayer.getDisplayName()
-            + " wurde durch den LuckyBlock von " + player.getDisplayName() + " gelöscht.");
+        game.broadcast("Das Inventar von " + randomPlayer.getDisplayName() + ChatColor.RESET
+            + " wurde durch den LuckyBlock von " + player.getDisplayName() + ChatColor.RESET
+            + " gelöscht.");
       }
     }
   }
