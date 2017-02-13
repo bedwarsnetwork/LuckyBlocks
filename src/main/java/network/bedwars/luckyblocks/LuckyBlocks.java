@@ -5,61 +5,53 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Logger;
-
+import lombok.Getter;
+import network.bedwars.luckyblocks.listener.BlockListener;
+import network.bedwars.luckyblocks.listener.PlayerListener;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Main extends JavaPlugin {
+public class LuckyBlocks extends JavaPlugin {
 
-  public static Main instance;
-  final PluginManager pluginManager = getServer().getPluginManager();
-  private PluginDescriptionFile pluginDescriptionFile = getDescription();
-  public static Logger logger = Logger.getLogger("Minecraft");
   public static Random random = new Random();
-  public static List<ItemStack> luckyItems;
-  public static List<ItemStack> luckyPotions;
+  @Getter
+  private static LuckyBlocks instance;
+  @Getter
+  private static List<ItemStack> luckyItems;
+  @Getter
+  private static List<ItemStack> luckyPotions;
 
   public void onEnable() {
     instance = this;
 
-    logger.info(pluginDescriptionFile.getFullName() + " has been enabled");
+    LuckyBlocks.luckyPotions = generateLuckyPotions();
+    Collections.shuffle(LuckyBlocks.luckyPotions, new Random());
 
-    Main.luckyPotions = getLuckyPotions();
-    Collections.shuffle(Main.luckyPotions, new Random());
+    LuckyBlocks.luckyItems = generateLuckyItems();
+    Collections.shuffle(LuckyBlocks.luckyItems, new Random());
 
-    Main.luckyItems = getLuckyItems();
-    Collections.shuffle(Main.luckyItems, new Random());
-
-    pluginManager.registerEvents(new BlockListener(), this);
-    pluginManager.registerEvents(new PlayerListener(), this);
+    this.getServer().getPluginManager().registerEvents(new BlockListener(), this);
+    this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
   }
 
   public void onDisable() {
-    logger.info(pluginDescriptionFile.getFullName() + " has been disabled.");
-  }
-
-  public static Main getInstance() {
-    return instance;
   }
 
   public boolean isBedwarsEnabled() {
-    return Main.getInstance().getServer().getPluginManager().isPluginEnabled("BedwarsRel");
+    return LuckyBlocks.getInstance().getServer().getPluginManager().isPluginEnabled("BedwarsRel");
   }
 
 
-  public List<ItemStack> getLuckyPotions() {
-    List<ItemStack> items = new ArrayList<ItemStack>();
+  private List<ItemStack> generateLuckyPotions() {
+    List<ItemStack> items = new ArrayList<>();
 
     int potionTypeCount = 0;
 
@@ -75,7 +67,7 @@ public class Main extends JavaPlugin {
         PotionEffectType.WEAKNESS, PotionEffectType.WITHER);
 
     while (potionTypeCount < 3) {
-      List<PotionEffectType> potionEffects = new ArrayList<PotionEffectType>();
+      List<PotionEffectType> potionEffects = new ArrayList<>();
       if (potionTypeCount == 0) {
         potionEffects.addAll(positivePotionEffects);
 
@@ -94,15 +86,15 @@ public class Main extends JavaPlugin {
           potion = new ItemStack(Material.POTION, 1);
         }
         PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
-        int potionEffectAmount = Main.random.nextInt(7 - 1) + 1;
+        int potionEffectAmount = LuckyBlocks.random.nextInt(7 - 1) + 1;
         int potionEffectCount = 0;
         while (potionEffectCount < potionEffectAmount) {
           int potionEffectValuesSize = potionEffects.size();
-          int potionEffectAmplifier = Main.random.nextInt(5);
-          int potionEffectDuration = (Main.random.nextInt(7 - 1) * 10) * 20;
+          int potionEffectAmplifier = LuckyBlocks.random.nextInt(5);
+          int potionEffectDuration = (LuckyBlocks.random.nextInt(7 - 1) * 10) * 20;
 
           PotionEffectType potionEffectType =
-              potionEffects.get(Main.random.nextInt(potionEffectValuesSize - 1) + 1);
+              potionEffects.get(LuckyBlocks.random.nextInt(potionEffectValuesSize - 1) + 1);
 
           potionMeta.addCustomEffect(
               new PotionEffect(potionEffectType, potionEffectDuration, potionEffectAmplifier),
@@ -129,10 +121,8 @@ public class Main extends JavaPlugin {
     return items;
   }
 
-  public List<ItemStack> getLuckyItems() {
-    List<ItemStack> luckyItems = new ArrayList<ItemStack>();
-
-
+  private List<ItemStack> generateLuckyItems() {
+    List<ItemStack> luckyItems = new ArrayList<>();
 
     List<Enchantment> toolEnchantments =
         Arrays.asList(Enchantment.DAMAGE_ALL, Enchantment.DIG_SPEED, Enchantment.DURABILITY,
@@ -153,8 +143,8 @@ public class Main extends JavaPlugin {
 
     int itemTypeCount = 0;
     while (itemTypeCount < 3) {
-      List<Enchantment> enchantments = new ArrayList<Enchantment>();
-      List<ItemStack> items = new ArrayList<ItemStack>();
+      List<Enchantment> enchantments = new ArrayList<>();
+      List<ItemStack> items = new ArrayList<>();
       if (itemTypeCount == 0) {
         enchantments.addAll(toolEnchantments);
         items.addAll(tools);
@@ -168,15 +158,16 @@ public class Main extends JavaPlugin {
       }
       int itemCount = 0;
       while (itemCount < 50) {
-        ItemStack item = items.get(Main.random.nextInt(items.size())).clone();
+        ItemStack item = items.get(LuckyBlocks.random.nextInt(items.size())).clone();
         ItemMeta itemMeta = item.getItemMeta();
-        int enchantmentAmount = Main.random.nextInt(5 - 1) + 1;
+        int enchantmentAmount = LuckyBlocks.random.nextInt(5 - 1) + 1;
         int enchantmentAmountCount = 0;
         while (enchantmentAmountCount < enchantmentAmount) {
           int enchantmentValuesSize = enchantments.size();
-          int enchantmentLevel = Main.random.nextInt(7 - 1) + 1;
+          int enchantmentLevel = LuckyBlocks.random.nextInt(7 - 1) + 1;
 
-          itemMeta.addEnchant(enchantments.get(Main.random.nextInt(enchantmentValuesSize - 1) + 1),
+          itemMeta.addEnchant(enchantments.get(
+              LuckyBlocks.random.nextInt(enchantmentValuesSize - 1) + 1),
               enchantmentLevel, true);
           enchantmentAmountCount++;
         }
