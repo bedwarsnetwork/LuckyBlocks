@@ -1,6 +1,7 @@
 package network.bedwars.luckyblocks.listener;
 
-import io.github.bedwarsrel.BedwarsRel.Game.Game;
+import io.github.bedwarsrel.BedwarsRel;
+import io.github.bedwarsrel.game.Game;
 import java.util.ArrayList;
 import java.util.List;
 import network.bedwars.luckyblocks.LuckyBlocks;
@@ -25,7 +26,7 @@ public class BlockListener implements Listener {
       return;
     }
 
-    io.github.bedwarsrel.BedwarsRel.Main bedwarsPlugin = (io.github.bedwarsrel.BedwarsRel.Main) LuckyBlocks
+    io.github.bedwarsrel.BedwarsRel bedwarsPlugin = (BedwarsRel) LuckyBlocks
         .getInstance().getServer().getPluginManager().getPlugin("BedwarsRel");
 
     Game game = bedwarsPlugin.getGameManager().getGameOfPlayer(event.getPlayer());
@@ -91,17 +92,21 @@ public class BlockListener implements Listener {
       if (randomPlayer != null) {
         game.setPlayerDamager(player, null);
         randomPlayer.setHealth(0);
-        game.broadcast(
-            randomPlayer.getDisplayName() + ChatColor.RESET + " wurde durch den LuckyBlock von "
-                + event.getPlayer().getDisplayName() + ChatColor.RESET + " getötet.");
+        game.getTeamPlayers().forEach((aPlayer) -> {
+          aPlayer.sendMessage(
+              randomPlayer.getDisplayName() + ChatColor.RESET + " wurde durch den LuckyBlock von "
+                  + event.getPlayer().getDisplayName() + ChatColor.RESET + " getötet.");
+        });
       }
     } else if (eventType == 9) {
       Player randomPlayer = getRandomTeamPlayer(game, player);
       if (randomPlayer != null) {
         randomPlayer.setHealth(0);
-        game.broadcast("Das Inventar von " + randomPlayer.getDisplayName() + ChatColor.RESET
-            + " wurde durch den LuckyBlock von " + event.getPlayer().getDisplayName()
-            + ChatColor.RESET + " gelöscht.");
+        game.getTeamPlayers().forEach((aPlayer) -> {
+          aPlayer.sendMessage("Das Inventar von " + randomPlayer.getDisplayName() + ChatColor.RESET
+              + " wurde durch den LuckyBlock von " + event.getPlayer().getDisplayName()
+              + ChatColor.RESET + " gelöscht.");
+        });
       }
     }
   }
@@ -153,17 +158,21 @@ public class BlockListener implements Listener {
       if (randomPlayer != null) {
         game.setPlayerDamager(player, null);
         randomPlayer.setHealth(0);
-        game.broadcast(
-            randomPlayer.getDisplayName() + ChatColor.RESET + " wurde durch den LuckyBlock von "
-                + player.getDisplayName() + ChatColor.RESET + " getötet.");
+        game.getTeamPlayers().forEach((aPlayer) -> {
+          aPlayer.sendMessage(
+              randomPlayer.getDisplayName() + ChatColor.RESET + " wurde durch den LuckyBlock von "
+                  + player.getDisplayName() + ChatColor.RESET + " getötet.");
+        });
       }
     } else if (eventType == 9) {
       Player randomPlayer = getRandomPlayer(game, false);
       if (randomPlayer != null) {
         randomPlayer.setHealth(0);
-        game.broadcast("Das Inventar von " + randomPlayer.getDisplayName() + ChatColor.RESET
-            + " wurde durch den LuckyBlock von " + player.getDisplayName() + ChatColor.RESET
-            + " gelöscht.");
+        game.getTeamPlayers().forEach((aPlayer) -> {
+          aPlayer.sendMessage("Das Inventar von " + randomPlayer.getDisplayName() + ChatColor.RESET
+              + " wurde durch den LuckyBlock von " + player.getDisplayName() + ChatColor.RESET
+              + " gelöscht.");
+        });
       }
     }
   }
