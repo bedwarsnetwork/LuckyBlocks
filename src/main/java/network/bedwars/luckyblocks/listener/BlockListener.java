@@ -3,6 +3,7 @@ package network.bedwars.luckyblocks.listener;
 import io.github.bedwarsrel.BedwarsRel;
 import io.github.bedwarsrel.game.Game;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import network.bedwars.luckyblocks.LuckyBlocks;
 import org.bukkit.ChatColor;
@@ -124,8 +125,10 @@ public class BlockListener implements Listener {
     } else if (eventType == 1) {
       int amount = (LuckyBlocks.random.nextInt(10) + 1) * 5;
       ItemStack luckyBlock = new ItemStack(Material.SPONGE, amount);
+      luckyBlock.setDurability((short) 1);
       ItemMeta luckyBlockMeta = luckyBlock.getItemMeta();
-      luckyBlockMeta.setDisplayName("Lucky Block");
+      luckyBlockMeta.setDisplayName("§fLuckyBlock");
+      luckyBlockMeta.setLore(Arrays.asList("Ist das Glück auf deiner Seite?"));
       luckyBlock.setItemMeta(luckyBlockMeta);
       event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), luckyBlock);
     } else if (eventType == 2) {
